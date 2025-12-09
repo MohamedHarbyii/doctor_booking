@@ -21,11 +21,11 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Patient whereUserId($value)
  * @mixin \Eloquent
  */
-class Patient extends Model
+class Patient extends User
 {
     /** @use HasFactory<\Database\Factories\PatientFactory> */
     use HasFactory;
     public function user() {
-        return $this->hasOne(User::class);
+        return $this->belongsTo(User::class);
     }
 }

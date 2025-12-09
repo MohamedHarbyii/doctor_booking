@@ -4,14 +4,14 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdatePatientRequest extends FormRequest
+class UpdatePatientRequest extends UpdateUserRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,8 +21,8 @@ class UpdatePatientRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        return array_merge([
             //
-        ];
+        ],$this->user_rules());
     }
 }

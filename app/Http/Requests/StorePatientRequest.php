@@ -23,6 +23,6 @@ class StorePatientRequest extends StoreUserRequest
     {
         return array_merge([
             
-        ]);
+        ],$this->user_rules());
     }
 }

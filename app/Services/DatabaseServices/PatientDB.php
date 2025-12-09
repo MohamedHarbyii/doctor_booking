@@ -1,19 +1,24 @@
 <?php
 namespace App\Services\DatabaseServices;
 
-use App\Models\Patient;
 use App\Models\User;
+use App\Models\Patient;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Auth;
 
 class PatientDB
 {
    
-    public function create(array $data): User
+    public static function create(array $data): User
     {
-        $user=User::create($data);
-        $data['user_id']=$user->id;
+        
+   
+
         $patient=Patient::create($data);
-        return $patient->load('user');
+        return $patient;
+  
+     
     }
 
     /**
@@ -25,27 +30,36 @@ class PatientDB
     }
 
     
-    public function getAll()
+    public static function getAll()
     {
-        return User::with('user')->cursorPaginate(15);
+        return Patient::with('user')->cursorPaginate(15);
     }
 
     /**
      * Update user by ID with provided data. Returns updated User or null.
      */
-    public function update(Patient $patient, array $data)
+    public static function update(Patient $patient, array $data)
     {
-        $user=(array)UserDB::update($patient->user,$data);
         $patient->update($data);
         return $patient->load('user');
     }
     /**
      * Delete user by ID. Returns true on success.
      */
-    public function delete(User $user): bool
+    public static function delete(Patient $patient)
     {
+        $patient->deleteOrFail();
+        $user=$patient->user;
+        UserDB::delete($user);
         
-        return (bool) $user->delete();
+        
+
+    }
+    public static function get_current_patient() {
+
+        return Patient::where('user_id','=',Auth::user()->id)->firstOrFail();
+   
+       
     }
 
     /**

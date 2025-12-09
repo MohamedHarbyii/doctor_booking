@@ -19,7 +19,7 @@ class StoreUserRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules(): array
+    public function user_rules(): array
     {
         return [
             'name' => ['required', 'string', 'max:255'],

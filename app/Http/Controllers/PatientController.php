@@ -4,17 +4,21 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePatientRequest;
 use App\Http\Requests\UpdatePatientRequest;
+use App\Http\Resources\PatientResource;
 use App\Models\Patient;
 use App\Services\DatabaseServices\PatientDB;
 use App\Services\DatabaseServices\UserDB;
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class PatientController extends Controller
 {
-    private $PatientDB;
+   
 
     public function __construct()
     {
-        $this->PatientDB = new PatientDB;
+        $this->middleware('auth:sanctum')->except(['index','show']);
+       
     }
 
     /**
@@ -22,54 +26,36 @@ class PatientController extends Controller
      */
     public function index()
     {
-        //
+       $patients=PatientDB::getAll();
+       return $this->sendSuccess(PatientResource::collection($patients));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StorePatientRequest $request)
-    {
-        $this->PatientDB->create($request->validated());
-    }
 
-    /**
-     * Display the specified resource.
-     */
+ 
     public function show(Patient $patient)
     {
-        //
+        $patient->load('user');
+        return $this->sendSuccess(new PatientResource($patient),'patient retreived successfully');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Patient $patient)
-    {
-        //
-    }
+   
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdatePatientRequest $request, Patient $patient)
+ 
+    public function update(UpdatePatientRequest $request)
     {
-        //
+        $patient=PatientDB::get_current_patient();
+        UserDB::update($patient->user,$request->except(''));
+        $patient=PatientDB::update($patient,$request->only(''));
+        return $this->sendSuccess(new PatientResource($patient));
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Patient $patient)
+    public function destroy()
     {
-        //
+        $patient=PatientDB::get_current_patient();
+        PatientDB::delete($patient);
     }
 }

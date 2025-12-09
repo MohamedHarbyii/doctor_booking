@@ -2,6 +2,7 @@
 namespace App\Services\DatabaseServices;
 
 use App\Models\User;
+use App\Services\ImageServices\UserImages;
 use Illuminate\Database\Eloquent\Collection;
 
 class UserDB 
@@ -9,7 +10,9 @@ class UserDB
    
     public static function create(array $data): User
     {
-        return User::create($data);
+        $user= User::create($data);
+        UserImages::upload($user);
+        return $user;
     }
 
     /**
@@ -33,16 +36,20 @@ class UserDB
     {
         $user->fill($data);
         $user->save();
+        if(isset($data['profile_photo'])){
+        UserImages::update($user);}
         return $user;
     }
 
     /**
      * Delete user by ID. Returns true on success.
      */
-    public function delete(User $user): bool
+    public static function delete(User $user)
     {
         
-        return (bool) $user->delete();
+        $user->deleteOrFail();
+        $user->tokens()->delete();
+        UserImages::delete($user);
     }
 
     /**
