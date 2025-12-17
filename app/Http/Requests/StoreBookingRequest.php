@@ -2,9 +2,12 @@
 
 namespace App\Http\Requests;
 
+use App\BookingStatus;
+use App\Rules\BookingTimeRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class StoreDoctorRequest extends StoreUserRequest
+class StoreBookingRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,13 +24,10 @@ class StoreDoctorRequest extends StoreUserRequest
      */
     public function rules(): array
     {
-        return array_merge([
-            'speciality_id'=>'required|exists:specialities,id',
-            'bio'=>'nullable',
-            'experience_years'=>'nullable',
-            'license_number'=>'required|unique:doctors,license_number',
-            'session_price'=>'nullable'
-
-        ],$this->user_rules());
+        return [
+            'available_time_id'=>['bail','required','exists:doctor_schedules,id',new BookingTimeRule()],
+            // 'status'=>['nullable',Rule::enum(BookingStatus::class)]
+        ];
+        
     }
 }

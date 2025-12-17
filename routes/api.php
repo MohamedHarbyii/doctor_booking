@@ -2,7 +2,11 @@
 
 
 use App\Http\Controllers\Auth\AuthController ;
+use App\Http\Controllers\AvailableTimeController;
+use App\Http\Controllers\BookingController;
+use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\PatientController;
+use App\Http\Controllers\ProvisionServer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
@@ -22,3 +26,6 @@ Route::controller(PatientController::class)->prefix('patient')->group(function()
     Route::patch('/',"update");
     Route::delete('/','destroy');
 });
+Route::apiResource('doctor',DoctorController::class);
+Route::apiResource('available-time',AvailableTimeController::class);
+Route::apiResource('booking',BookingController::class);

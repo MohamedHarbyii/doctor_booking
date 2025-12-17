@@ -30,9 +30,7 @@ class UpdateUserRequest extends FormRequest
                 'email',
                 Rule::unique('users', 'email')->ignore($this->user()->id),
             ],
-
             'password' => 'sometimes|nullable|string|min:8|confirmed',
-
             'profile_photo' => 'sometimes|nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
     }

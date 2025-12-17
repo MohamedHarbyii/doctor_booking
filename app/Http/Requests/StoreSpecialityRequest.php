@@ -4,14 +4,14 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreDoctorRequest extends StoreUserRequest
+class StoreSpecialityRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return true;
+        return false;
     }
 
     /**
@@ -21,13 +21,8 @@ class StoreDoctorRequest extends StoreUserRequest
      */
     public function rules(): array
     {
-        return array_merge([
-            'speciality_id'=>'required|exists:specialities,id',
-            'bio'=>'nullable',
-            'experience_years'=>'nullable',
-            'license_number'=>'required|unique:doctors,license_number',
-            'session_price'=>'nullable'
-
-        ],$this->user_rules());
+        return [
+            //
+        ];
     }
 }

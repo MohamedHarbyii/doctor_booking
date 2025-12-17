@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreDoctorRequest extends StoreUserRequest
+class Updateavailable_timeRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,13 +21,13 @@ class StoreDoctorRequest extends StoreUserRequest
      */
     public function rules(): array
     {
-        return array_merge([
-            'speciality_id'=>'required|exists:specialities,id',
-            'bio'=>'nullable',
-            'experience_years'=>'nullable',
-            'license_number'=>'required|unique:doctors,license_number',
-            'session_price'=>'nullable'
-
-        ],$this->user_rules());
+        return [
+            'doctor_id' => ['sometimes', 'integer', 'exists:doctors,id'],
+            'date' => ['sometimes', 'date', 'after_or_equal:today'],
+            'start_time' => ['sometimes', 'date_format:H:i'],
+            'end_time' => ['sometimes', 'date_format:H:i', 'after:start_time'],
+            'is_active' => ['boolean'],
+            'is_booked' => ['boolean'],
+        ];
     }
 }

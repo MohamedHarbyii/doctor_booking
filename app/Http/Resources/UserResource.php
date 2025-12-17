@@ -21,7 +21,7 @@ class UserResource extends JsonResource
             'phone' => $this->phone,
             'joined_at' => $this->created_at->format('Y-m-d'),
             'token'=> $this->when($this->token, $this->token),
-            'photo'=>$this->getFirstMediaUrl('users'),
+            'photo'=>$this->getFirstMediaUrl('user'),
 
         ];
     }

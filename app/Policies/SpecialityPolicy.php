@@ -3,10 +3,10 @@
 namespace App\Policies;
 
 use Illuminate\Auth\Access\Response;
-use App\Models\Doctor;
+use App\Models\Speciality;
 use App\Models\User;
 
-class DoctorPolicy
+class SpecialityPolicy
 {
     /**
      * Determine whether the user can view any models.
@@ -19,7 +19,7 @@ class DoctorPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Doctor $doctor): bool
+    public function view(User $user, Speciality $speciality): bool
     {
         return false;
     }
@@ -35,23 +35,23 @@ class DoctorPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Doctor $doctor): bool
+    public function update(User $user, Speciality $speciality): bool
     {
-        return ($user->id==$doctor->user_id)||$user->hasRole('admin');
+        return false;
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Doctor $doctor): bool
+    public function delete(User $user, Speciality $speciality): bool
     {
-        return ($user->id==$doctor->user_id)||$user->hasRole('admin');
+        return false;
     }
 
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Doctor $doctor): bool
+    public function restore(User $user, Speciality $speciality): bool
     {
         return false;
     }
@@ -59,7 +59,7 @@ class DoctorPolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, Doctor $doctor): bool
+    public function forceDelete(User $user, Speciality $speciality): bool
     {
         return false;
     }

@@ -2,6 +2,7 @@
 namespace App\Services\DatabaseServices;
 
 use App\Models\User;
+use App\Services\ImageServices\ImageServiece;
 use App\Services\ImageServices\UserImages;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -11,14 +12,16 @@ class UserDB
     public static function create(array $data): User
     {
         $user= User::create($data);
-        UserImages::upload($user);
-        return $user;
+        if(isset($data['image']))
+        ImageServiece::upload($user,'user');
+        
+        return $user->load('media');
     }
 
     /**
      * Get single user by ID or null if not found.
      */
-    public function getById(int $id): ?User
+    public static function getById(int $id): ?User
     {
         return User::find($id);
     }
@@ -36,8 +39,8 @@ class UserDB
     {
         $user->fill($data);
         $user->save();
-        if(isset($data['profile_photo'])){
-        UserImages::update($user);}
+        if(isset($data['image'])){
+        ImageServiece::update($user,'user');}
         return $user;
     }
 
@@ -49,7 +52,7 @@ class UserDB
         
         $user->deleteOrFail();
         $user->tokens()->delete();
-        UserImages::delete($user);
+        ImageServiece::delete($user,'user');
     }
 
     /**
